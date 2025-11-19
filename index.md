@@ -190,8 +190,8 @@ body::before{
 }
 
 /* ---------- Light-mode text color tweak ---------- */
-[data-theme="dark"] .brand h1, [data-theme="dark"] .tag{color:#0b1220}
-[data-theme="dark"] .meta-footer, [data-theme="dark"] .tag{color:var(--muted)}
+[data-theme="light"] .brand h1, [data-theme="light"] .tag{color:#0b1220}
+[data-theme="light"] .meta-footer, [data-theme="light"] .tag{color:var(--muted)}
 </style>
 
 <script>
@@ -265,5 +265,6 @@ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   });
 })();
 </script>
+
 
 
