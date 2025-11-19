@@ -45,7 +45,7 @@ title: Chatbot
 
   <main class="chat-area" id="chatArea" role="main">
     <div class="chat-shell">
-      <!-- WRAPPER: on mobile this box keeps the same visible size and allows horizontal panning -->
+      <!-- Visible fixed-size box with native panning inside -->
       <div class="iframe-wrap" id="iframeWrap" tabindex="0" aria-label="Chat iframe wrapper">
         <iframe id="chatFrame"
                 src="https://udify.app/chatbot/sI7tIcJbUKYk9pHy"
@@ -62,10 +62,10 @@ title: Chatbot
 <button id="fab" class="fab" aria-label="Open info">❔</button>
 
 <style>
-/* ---------- Configurable sizes ---------- */
+/* ---------- Change these if you want different sizes ---------- */
 :root{
-  --embed-width: 1000px;   /* inner iframe width on mobile (change if needed) */
-  --embed-height: 700px;   /* visible box height (same as previous chatbot) */
+  --embed-width: 1000px;   /* inner iframe width (controls horizontal pan area) */
+  --embed-height: 600px;   /* visible box height (same on desktop & mobile) */
   --bg-1: #0f172a; --bg-2: #0b1226;
   --text: #e6eef8; --muted: #9aa6b2; --accent: #60a5fa;
   --glass: rgba(255,255,255,0.06); --radius:14px;
@@ -83,94 +83,93 @@ body{
 }
 
 /* header & controls */
-.site-header{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto 18px;z-index:2}
+.site-header{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto 12px;z-index:2}
 .brand{display:flex;align-items:center;gap:12px}
-.logo{width:56px;height:56px;border-radius:12px;display:grid;place-items:center;font-size:26px;background:linear-gradient(135deg,#1e3a8a,#60a5fa)}
-.brand h1{margin:0;font-size:18px;color:var(--text)}
+.logo{width:48px;height:48px;border-radius:10px;display:grid;place-items:center;font-size:22px;background:linear-gradient(135deg,#1e3a8a,#60a5fa)}
+.brand h1{margin:0;font-size:17px;color:var(--text)}
 .tag{margin:0;color:var(--muted);font-size:13px}
 .controls{display:flex;gap:8px}
 .icon-btn{background:var(--glass);border:0;padding:8px 10px;border-radius:10px;cursor:pointer}
 
 /* layout */
-.layout{display:grid;grid-template-columns:320px 1fr;gap:20px;max-width:1200px;margin:0 auto;align-items:start;z-index:2}
-.meta{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:var(--radius);padding:18px;color:var(--text);box-shadow:0 10px 30px rgba(2,6,23,0.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.03)}
+.layout{display:grid;grid-template-columns:300px 1fr;gap:18px;max-width:1100px;margin:0 auto;align-items:start;z-index:2}
+.meta{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:12px;padding:16px;color:var(--text);box-shadow:0 8px 24px rgba(2,6,23,0.5);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.03)}
 .meta p, .meta ul li, .meta details summary{color:var(--text)}
 .meta ul{padding-left:18px;margin:6px 0 12px}
-.meta-footer{margin-top:22px;color:var(--muted);font-size:13px}
+.meta-footer{margin-top:18px;color:var(--muted);font-size:13px}
 
 /* chat card */
 .chat-area{display:flex;align-items:flex-start;justify-content:center}
 .chat-shell{
   width:100%;
-  min-height:560px;
-  border-radius:var(--radius);
-  padding:12px;
+  border-radius:12px;
+  padding:10px;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  box-shadow: 0 18px 40px rgba(2,6,23,0.6);
+  box-shadow: 0 14px 32px rgba(2,6,23,0.5);
   border:1px solid rgba(255,255,255,0.03);
   overflow:hidden;
   display:flex; flex-direction:column;
 }
 
-/* wrapper provides a fixed visible box and native scrolling; desktop shows full-width iframe */
+/* wrapper: fixed visible box that doesn't grow the page */
 .iframe-wrap{
   width:100%;
+  height: var(--embed-height);        /* visible box height */
+  max-height: var(--embed-height);
+  overflow:auto;                      /* enables horizontal & vertical scroll inside the box */
+  -webkit-overflow-scrolling: touch;
   border-radius:10px;
   background:transparent;
-  overflow:auto;                /* enables horizontal & vertical scroll */
-  -webkit-overflow-scrolling: touch;
   outline:none;
   display:block;
 }
 
-/* desktop: iframe fills container */
+/* desktop: iframe fills width of container and matches visible height */
 .iframe-wrap iframe{
   display:block;
   width:100%;
-  height:700px;
+  height: var(--embed-height);
   border:0;
   border-radius:10px;
   background:transparent;
   max-width:100%;
 }
 
-/* FAB */
-.fab{position:fixed;right:18px;bottom:22px;z-index:60;border:0;background:linear-gradient(135deg,var(--accent), #7dd3fc 90%);color:#042a2b;padding:12px 14px;border-radius:999px;box-shadow:0 10px 30px rgba(2,6,23,0.35);cursor:pointer;display:none}
-
-/* ---------- MOBILE: fixed-height fit box + wide iframe for horizontal panning ---------- */
+/* mobile: inner iframe becomes wider than wrapper so you can scroll left/right */
 @media (max-width:900px){
   body{padding:12px}
   .layout{grid-template-columns:1fr;gap:12px;margin-bottom:80px}
   .meta{
-    position:fixed; right:12px; top:72px; width:82%; max-width:420px; transform:translateX(110%); transition:transform .28s cubic-bezier(.2,.9,.3,1);
-    box-shadow:0 30px 60px rgba(2,6,23,0.6); display:block; height:calc(100vh - 96px); overflow:auto;
+    position:fixed; right:12px; top:68px; width:82%; max-width:420px; transform:translateX(110%); transition:transform .26s cubic-bezier(.2,.9,.3,1);
+    box-shadow:0 28px 56px rgba(2,6,23,0.5); display:block; height:calc(100vh - 92px); overflow:auto;
   }
   .meta.open{transform:translateX(0)}
-  .chat-shell{min-height:unset; height:auto; padding:8px}
+  .chat-shell{padding:8px}
 
-  /* FIX: visible box is fixed height (same as previous chatbot). The iframe is wider than the box,
-     which allows horizontal scrolling inside the box. */
+  /* Keep the visible box small (same as desktop). The iframe inside is wider for panning. */
   .iframe-wrap{
-    height: var(--embed-height);  /* visible fit box height */
+    height: var(--embed-height);
     max-height: var(--embed-height);
     overflow:auto;
     -webkit-overflow-scrolling: touch;
     border-radius:8px;
   }
 
-  /* Inner iframe intentionally larger than the box to enable left<->right scrolling.
-     Set --embed-width to control how wide the embedded app is (default 1000px). */
   .iframe-wrap iframe{
-    width: var(--embed-width);
-    height: 100%;
+    width: var(--embed-width);   /* intentionally wider than wrapper for horizontal pan */
+    height: var(--embed-height);
     max-width: none;
     border-radius:6px;
     display:block;
   }
 
-  .controls{gap:6px}
   .fab{display:block}
   .site-header{margin-bottom:8px}
+}
+
+/* small desktop tweak */
+@media (min-width:1200px){
+  .layout{max-width:1200px}
 }
 
 /* light-mode tweaks */
@@ -198,7 +197,7 @@ body{
   });
 })();
 
-/* Info panel toggle and helpers */
+/* Info panel toggle & helpers */
 (function(){
   const infoToggle = document.getElementById('infoToggle');
   const meta = document.getElementById('metaPanel');
